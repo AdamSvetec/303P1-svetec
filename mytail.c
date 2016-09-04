@@ -12,12 +12,16 @@ void tail_file(char *filename, int numlines) {
   for(int i = 0; i < numlines; i++){
     buffer[i] = (char *)malloc(1024*sizeof(char));
   }
-  
   FILE * fp;
-  fp = fopen(filename, "r");
+  if(filename == NULL){
+    fp = stdin;
+  }else{
+    fp = fopen(filename, "r");
+  }
   if(fp == NULL)
     exit(1);
 
+  
   int line_num = 0;
   while(fgets(buffer[line_num % numlines], 1024, fp) != NULL){
     line_num++;    
