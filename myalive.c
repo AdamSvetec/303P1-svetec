@@ -5,14 +5,41 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include "support.h"
+#include <unistd.h>
+
+volatile int sig_flag = 0;
+void sighandler(int);
 
 /*
  * alive() - install some signal handlers, set an alarm, and wait...
  */
 void alive(void) {
-    /* TODO: Complete this function */
-    /* Note: you will probably need to implement some other functions */
+  struct timeval start;
+  struct timeval end;
+  gettimeofday(&start, NULL);
+  signal(SIGINT, sighandler);
+  signal(SIGALRM, sighandler);
+  alarm(10);
+  while(1){
+    switch (sig_flag){
+      case SIGINT:
+	fprintf(stderr,"\nno\n");
+	sig_flag = 0;
+	signal(SIGINT, sighandler);
+	break;
+      case SIGALRM:
+	gettimeofday(&end, NULL);
+	long elapsed = end.tv_sec-start.tv_sec;
+	fprintf(stderr, "Ran for %ld seconds\n", elapsed);
+	exit(1);
+      }
+  }
 }
+
+void sighandler(int signum){
+  sig_flag = signum;
+}
+
 
 /*
  * help() - Print a help message.
