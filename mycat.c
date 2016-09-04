@@ -7,8 +7,22 @@
  * cat_file() - display the contents of a file by reading it, line by line
  */
 void cat_file(char *filename) {
-    /* TODO: Complete this function */
-    
+  char str [1024];
+  if(filename == NULL){ //STDIN
+    while(fgets(str, 1024, stdin) != NULL )
+      printf(str);
+  }else{ //File
+    FILE * fp;
+    fp = fopen(filename, "r");
+    if(fp == NULL){
+      perror("Error opening file");
+      exit(1);
+    }else{
+      while(fgets(str,1024,fp) != NULL )
+	printf(str);
+      fclose(fp);
+    }
+  }
 }
 
 /*
