@@ -7,7 +7,15 @@
  * head_file() - display the first numlines lines of stdin
  */
 void head_file(int numlines) {
-    /* TODO: Complete this function */
+  char c;
+  int lineCounter = 0;
+  c = getc(stdin);
+  while(c != EOF && lineCounter < numlines){
+    if(c == '\n')
+      lineCounter++;
+    printf("%c",c);
+    c = getc(stdin);
+  }
 }
 
 /*
