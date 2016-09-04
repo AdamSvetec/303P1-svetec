@@ -7,7 +7,36 @@
  * wc_file() - count characters, words, and lines
  */
 void wc_file(char *filename) {
-    /* TODO: Complete this function */
+  if(filename == NULL)
+    exit(1);
+
+  int c;
+  int char_count = 0;
+  int word_count = 0;
+  int line_count = 0;
+  int whitespace_flag = 1;
+  FILE * fp;
+  fp = fopen(filename, "r");
+  if(fp == NULL)
+    exit(1);
+  do{
+    c = getc(fp);
+    if((c == ' ' || c == '\t') && whitespace_flag == 0){
+      word_count++;
+      whitespace_flag = 1;
+    }else if(c == '\n'){
+      line_count++;
+      if(whitespace_flag == 0){
+	word_count++;
+      }
+      whitespace_flag = 1;
+    }else if(c != ' ' && c != '\t' && c != '\n'){
+      whitespace_flag = 0;
+    }
+    char_count++;
+  }while(c != EOF);
+  char_count--; //for eof
+  printf("%d %d %d %s\n",line_count, word_count, char_count, filename);
 }
 
 /*
