@@ -4,6 +4,12 @@
 #include <string.h>
 #include "support.h"
 
+/*
+  Verifies the pattern passed in is the correct format
+  Sets the values of find and replace_with to the strings in the
+   pattern
+   -Warning: does not account for overflow of find and replace_with
+*/
 int check_pattern(const char * pattern, char * find, char * replace_with){
   int char_pointer = 0;
   if(pattern[char_pointer] == '\0' || pattern[char_pointer] != 's')
@@ -38,15 +44,19 @@ int check_pattern(const char * pattern, char * find, char * replace_with){
   return 0;
 }
 
-char * replace_str(char *str, char *find, char *replace){
-  static char buffer[2048];
+/*
+  Will replace the first instance of find in str with replace and
+  return the new string
+ */
+void replace_str(char *str, char *newstr, char *find, char *replace){
   char *p;
-  if(!(p = strstr(str, find)))
-    return str;
-  strncpy(buffer, str, p-str);
-  buffer[p-str] = '\0';
-  sprintf(buffer+(p-str), "%s%s", replace, p+strlen(find));
-  return buffer;
+  if(!(p = strstr(str, find))){
+    strcpy(newstr, str);
+    return;
+  }
+  strncpy(newstr, str, p-str);
+  newstr[p-str] = '\0';
+  sprintf(newstr+(p-str), "%s%s", replace, p+strlen(find));
 }
 
 /*
@@ -78,11 +88,11 @@ void sed_file(char *filename, char *pattern) {
 
   char line [2048];
   while(fgets(line, 2048, fp) != NULL){
-    char * newstr;
-    newstr = replace_str(line, find, replace_with);
+    char newstr [2048];
+    replace_str(line, newstr, find, replace_with);
     while(0 != strcmp(newstr, line)){
       strcpy(line, newstr);
-      newstr = replace_str(line, find, replace_with);
+      replace_str(line, newstr, find, replace_with);
     }
     printf("%s", newstr);
   }
