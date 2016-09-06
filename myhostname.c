@@ -2,13 +2,46 @@
 #include <stdio.h>
 #include <netdb.h>
 #include "support.h"
+#include <sys/unistd.h>
+#include <string.h>
+
+#define _GNU_SOURCE
+
+int gethostname();
 
 /*
  * host() - Print the hostname of the machine on which this program is
  *          running, formatted a few different ways
  */
 void host(void) {
-    /* TODO: Complete this function */
+  char hostname [256];
+  if(0 != gethostname(hostname, sizeof hostname)){
+    printf("Error getting hostname\n");
+  }else{
+    char temp [256];
+    int i;
+    for(i = 0; i < strlen(hostname); i++){
+      temp[i] = tolower(hostname[i]);
+    }
+    temp[i] = '\0';
+    printf("%s\n", temp);
+
+    for(i = 0; i < strlen(hostname); i++){
+      temp[i] = toupper(hostname[i]);
+    }
+    temp[i] = '\0';
+    printf("%s\n", temp);
+    
+    printf("%s\n", hostname);
+
+    int c, j;
+    for (i = 0, j = strlen(hostname) - 1; i < j; i++, j--){
+      c = hostname[i];
+      hostname[i] = hostname[j];
+      hostname[j] = c;
+    }
+    printf("%s\n", hostname);
+  }
 }
 
 /*
