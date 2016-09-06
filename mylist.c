@@ -3,12 +3,133 @@
 #include <stdlib.h>
 #include "support.h"
 
+/* link struct */
+struct link{
+  int value;
+  struct link * next;
+};
+
+/* global head */
+struct link * head;
+
+/* insert value into list (sorted) */
+void insert_val(int value){
+  if(head == NULL){
+    head = (struct link*)malloc(sizeof(struct link));
+    head->value = value;
+  }else{
+    struct link * pointer = head;
+    struct link * new_link = (struct link*)malloc(sizeof(struct link));
+    new_link->value = value;
+    if(pointer->value >= value){
+      head = new_link;
+      new_link->next = pointer;
+      return;
+    }
+    while(pointer->next != NULL && pointer->next->value <= value){
+      pointer = pointer->next;
+    }
+    new_link->next = pointer->next;
+    pointer->next = new_link;
+  }
+}
+
+/* remove value from list */
+void remove_val(int value){
+  struct link * pointer = head;
+  struct link * last_visited;
+  if(pointer == NULL){
+    return;
+  }
+  if(pointer->value == value){
+    head = pointer->next;
+    free(pointer);
+    return;
+  }
+  last_visited = pointer;
+  pointer = pointer->next;
+  while(pointer != NULL){
+    if(pointer->value == value){
+      last_visited->next = pointer->next;
+      free(pointer);
+      return;
+    }
+    last_visited = pointer;
+    pointer = pointer->next;
+  }
+}
+
+/* print list */
+void print(){
+  if(head == NULL){
+    return;
+  }
+  struct link * pointer = head;
+  printf("%d", pointer->value);
+  while(pointer->next != NULL){
+    pointer = pointer->next;
+    printf("-->%d",pointer->value);
+  }
+  printf("\n");
+}
+
+/* delete list */
+void delete_list(){
+  struct link * pointer = head;
+  struct link * next;
+  while(pointer != NULL){
+    next = pointer->next;
+    free(pointer);
+    pointer = next;
+  }
+}
+
+/* get value from command that was issued */
+void get_command_val(char * input, int * value){
+  int pointer = 2;
+  char str_value [100];
+  while(input[pointer] != EOF && input[pointer] != '\n'){
+    str_value[pointer-2] = input[pointer];
+    pointer++;
+  }
+  str_value[pointer-2] = '\0';
+  (*value) = (int) strtol(str_value, NULL, 10); //Not really safe but...
+}
+
 /*
  * list_task() - read from stdin, determine the appropriate behavior, and
  *               perform it.
  */
 void list_task(void) {
-    /* TODO: Complete this function */
+  char input [100];
+  char command;
+  int value;
+  while(1){
+    if(fgets(input, 100, stdin) == NULL){
+      exit(1);
+    }
+    command = input[0];
+    if(command == 'x'){
+      delete_list();
+      exit(1);
+    }
+    if(command == 'p'){
+      print();
+      continue;
+    }
+    get_command_val(input, &value);
+    switch (command){
+    case 'i':
+      insert_val(value);
+      break;
+    case 'r':
+      remove_val(value);
+      break;
+    default:
+      printf("Command not recognized\n");
+      break;
+    }
+  }
 }
 
 /*
