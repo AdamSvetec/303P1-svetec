@@ -8,12 +8,22 @@
  * grep_file() - display all lines of filename that contain searchstr
  */
 void grep_file(char *filename, char *searchstr) {
-  FILE * fp;
-  fp = fopen(filename, "r");
-  if(fp == NULL){
-    printf("Error: File is invalid");
+  if(searchstr == NULL){
+    printf("Error: search string needed\n");
     exit(1);
   }
+
+  FILE * fp;
+  if(filename == NULL){
+    fp = stdin;
+  }else{
+    fp = fopen(filename, "r");
+  }
+  if(fp == NULL){
+    printf("Error: File could not be opened\n");
+    exit(1);
+  }
+  
   char line [1024];
   while(fgets(line, 1024, fp) != NULL){
     if(strstr(line, searchstr) != NULL){
@@ -49,12 +59,6 @@ int main(int argc, char **argv) {
         switch(opt) {
           case 'h': help(argv[0]); break;
         }
-    }
-
-    /* make sure we have two more parameters */
-    if (optind != argc - 2) {
-        printf("Error: not enough arguments\n");
-        exit(1);
     }
 
     grep_file(argv[2], argv[1]);
