@@ -8,7 +8,7 @@
   Verifies the pattern passed in is the correct format
   Sets the values of find and replace_with to the strings in the
    pattern
-   -Warning: does not account for overflow of find and replace_with
+   -Does not account for overflow of find and replace_with
 */
 int check_pattern(const char * pattern, char * find, char * replace_with){
   int char_pointer = 0;
