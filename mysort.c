@@ -6,11 +6,12 @@
 #include <string.h>
 #include "support.h"
 
-/* Function used to compare lines */ 
+/* Function used by qsort to compare lines */ 
 int compare_function(const void * a, const void * b){
   return strcmp(*(char**)a, *(char**)b);
 }
 
+/* prints all lines in the 2-d char array */
 void print_lines(char ** lines, int length){
   for(int i = 0; i < length; i++){
     fprintf(stderr,"%s",lines[i]);
@@ -21,6 +22,7 @@ void print_lines(char ** lines, int length){
 void make_unique(char ** lines, int *length){
   for(int pointer = 1; pointer < *length; pointer++){
     if(strcmp(lines[pointer], lines[pointer-1]) == 0){
+      //If there is duplicate, free duplicate and shift array downward
       free(lines[pointer-1]);
       for(int shifter = pointer; shifter < *length; shifter++){
 	lines[shifter-1] = lines[shifter];
@@ -56,9 +58,11 @@ void sort_file(char *filename, int unique, int reverse) {
 
   FILE * fp;
   fp = fopen(filename, "r");
-  if(fp == NULL)
+  if(fp == NULL){
+    perror("File could not be opened");
     exit(1);
-
+  }
+    
   int line_num = 0;
   lines[line_num] = (char *)malloc(1024*sizeof(char));
   while(fgets(lines[line_num], 1024, fp) != NULL){
@@ -73,7 +77,7 @@ void sort_file(char *filename, int unique, int reverse) {
     make_unique(lines, &line_num);
 
   if(reverse)
-    reverse_arr(lines,line_num);
+    reverse_arr(lines, line_num);
   
   int pointer = 0;
   while(pointer < line_num){
