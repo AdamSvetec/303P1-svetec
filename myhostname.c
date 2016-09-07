@@ -20,20 +20,24 @@ void host(void) {
   }else{
     char temp [256];
     int i;
+    //lowercase
     for(i = 0; i < strlen(hostname); i++){
       temp[i] = tolower(hostname[i]);
     }
     temp[i] = '\0';
     printf("%s\n", temp);
 
+    //UPPERCASE
     for(i = 0; i < strlen(hostname); i++){
       temp[i] = toupper(hostname[i]);
     }
     temp[i] = '\0';
     printf("%s\n", temp);
-    
+
+    //Regular Case
     printf("%s\n", hostname);
 
+    //Reversed
     int c, j;
     for (i = 0, j = strlen(hostname) - 1; i < j; i++, j--){
       c = hostname[i];
