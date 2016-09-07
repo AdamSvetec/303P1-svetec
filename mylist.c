@@ -109,20 +109,19 @@ void list_task(void) {
       exit(1);
     }
     command = input[0];
-    if(command == 'x'){
+    switch (command){
+    case 'x':
       delete_list();
       exit(1);
-    }
-    if(command == 'p'){
+    case 'p':
       print();
-      continue;
-    }
-    get_command_val(input, &value);
-    switch (command){
+      break;
     case 'i':
+      get_command_val(input, &value);
       insert_val(value);
       break;
     case 'r':
+      get_command_val(input, &value);
       remove_val(value);
       break;
     default:
