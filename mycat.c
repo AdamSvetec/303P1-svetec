@@ -8,21 +8,22 @@
  */
 void cat_file(char *filename) {
   char str [1024];
-  if(filename == NULL){ //STDIN
-    while(fgets(str, 1024, stdin) != NULL )
-      printf(str);
-  }else{ //File
-    FILE * fp;
+  FILE * fp;
+  if(filename == NULL){
+    fp = stdin;
+  }else{
     fp = fopen(filename, "r");
-    if(fp == NULL){
+  }
+
+  if(fp == NULL){
       perror("Error opening file");
       exit(1);
-    }else{
-      while(fgets(str,1024,fp) != NULL )
-	printf(str);
-      fclose(fp);
-    }
   }
+
+  while(fgets(str,1024,fp) != NULL ){
+	printf(str);
+  }
+  fclose(fp);
 }
 
 /*
