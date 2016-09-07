@@ -19,23 +19,24 @@ void wc_file(char *filename) {
   fp = fopen(filename, "r");
   if(fp == NULL)
     exit(1);
+  
   do{
     c = getc(fp);
-    if((c == ' ' || c == '\t') && whitespace_flag == 0){
+    if((c == ' ' || c == '\t') && whitespace_flag == 0){ //space or tab
       word_count++;
       whitespace_flag = 1;
-    }else if(c == '\n'){
+    }else if(c == '\n'){ //newline
       line_count++;
       if(whitespace_flag == 0){
 	word_count++;
       }
       whitespace_flag = 1;
-    }else if(c != ' ' && c != '\t' && c != '\n'){
+    }else if(c != ' ' && c != '\t' && c != '\n'){ //reset whitespace flag
       whitespace_flag = 0;
     }
     char_count++;
   }while(c != EOF);
-  char_count--; //for eof
+  char_count--; //not counting eof as char
   printf("%d %d %d %s\n",line_count, word_count, char_count, filename);
 }
 
