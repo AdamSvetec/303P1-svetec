@@ -38,6 +38,7 @@ void wc_file(char *filename) {
   }while(c != EOF);
   char_count--; //not counting eof as char
   printf("%d %d %d %s\n",line_count, word_count, char_count, filename);
+  fclose(fp);
 }
 
 /*
