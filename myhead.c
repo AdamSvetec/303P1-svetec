@@ -10,10 +10,12 @@ void head_file(int numlines) {
   char c;
   int lineCounter = 0;
   c = getc(stdin);
-  while(c != EOF && lineCounter < numlines){
+  while(c != EOF){
     if(c == '\n')
       lineCounter++;
     printf("%c",c);
+    if(lineCounter >= numlines)
+      exit(1);
     c = getc(stdin);
   }
 }
