@@ -69,6 +69,7 @@ void sort_file(char *filename, int unique, int reverse) {
     line_num++;
     lines[line_num] = (char *)malloc(1024*sizeof(char));
   }
+  free(lines[line_num]);
   fclose(fp);
   
   qsort(lines, line_num, sizeof(char*), compare_function);
